@@ -7,10 +7,10 @@ The CAFI package provides a simple way to work various cloud providers allowing 
 Configure the CAFI Module for logging settings
 ```go
     // Import the CAFI module
-	import cafi "github.com/dsledge/cafi"
+    import cafi "github.com/dsledge/cafi"
 
-	// Configure the CAFI SDK
-	cafi.Configure(logfile, loglevel)
+    // Configure the CAFI SDK
+    cafi.Configure(logfile, loglevel)
 ```    
 
 ## AWS Provider
@@ -38,11 +38,11 @@ This is an example of an account.json file and the fields it requires, This file
 Configure the CAFI Module for logging settings
 ```go
     // Import the CAFI module
-	import aws_cafi "github.com/dsledge/cafi/aws"
+    import aws_cafi "github.com/dsledge/cafi/aws"
 
     // Configure the AWS Provider
-	err := aws_cafi.Configure("accounts.json")
-	if err != nil {
-		scribble.Fatal("Error: %s", err)
-	}
+    err := aws_cafi.Configure("accounts.json")
+    if err != nil {
+        scribble.Fatal("Error: %s", err)
+    }
 ```
