@@ -12,13 +12,10 @@ import (
 )
 
 var (
-	logfile  = flag.String("logfile", "console", "The default log file will log to system console")
-	loglevel = flag.Int("loglevel", 0, "Sets the default log level to INFO messages and higher")
+	logfile      = flag.String("logfile", "console", "The default log file will log to system console")
+	loglevel     = flag.Int("loglevel", 0, "Sets the default log level to INFO messages and higher")
+	accountsfile = flag.String("accountsfile", "accounts.json", "Path and file to use as the accounts.json file")
 )
-
-type TestOutput struct {
-	Name string
-}
 
 func main() {
 	flag.Parse()
@@ -27,40 +24,29 @@ func main() {
 	cafi.Configure(logfile, loglevel)
 
 	// Configure the AWS Provider
-	err := aws_cafi.Configure("accounts.json")
+	err := aws_cafi.Configure(*accountsfile)
 	if err != nil {
 		scribble.Fatal("Error: %s", err)
 	}
 
 	// Function to run through the account iterator
 	s3listbuckets := func(input *aws_cafi.Input, output aws_cafi.Output) {
-		// Iterate over the region list
-		for _, region := range input.Account.SupportedRegions {
-			input.Config.Region = region
-			svc := s3.NewFromConfig(*input.Config)
+		svc := s3.NewFromConfig(*input.Config)
 
-			// Call the list buckets api operation
-			listBucketsResult, err := svc.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
-			if err != nil {
-				panic("Couldn't list buckets")
-			}
+		// Call the list buckets api operation
+		listBucketsResult, err := svc.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
+		if err != nil {
+			panic("Couldn't list buckets")
+		}
 
-			// Iterate over the results and print out the buckets
-			for _, bucket := range listBucketsResult.Buckets {
-				fmt.Printf("Account: %s \tRegion: %s \tBucket: %s\n", input.Account.AccountName, region, *bucket.Name)
-			}
-
-			// Assert the object type from the interface to the known object type
-			testoutput := output.(*TestOutput)
-			testoutput.Name = "Test"
+		// Iterate over the results and print out the buckets
+		for _, bucket := range listBucketsResult.Buckets {
+			fmt.Printf("Account: %s \tRegion: %s \tBucket: %s\n", input.Account.AccountName, input.Config.Region, *bucket.Name)
 		}
 	}
 
-	output := TestOutput{}
-	err = aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, &output)
+	err = aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, nil)
 	if err != nil {
 		fmt.Printf("Error iterating accounts: %s\n", err)
 	}
-
-	fmt.Printf("TESTING OUTPUT: %s\n", output.Name)
 }
