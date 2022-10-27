@@ -11,7 +11,18 @@ Configure the CAFI Module for logging settings
 
     // Configure the CAFI SDK
     cafi.Configure(logfile, loglevel)
-```    
+```
+
+### CAFI NewRandomToken utility function
+This is a utility function to generate a new random token hex encoded. Here is an snippet of how to use the function. A full functional example can be found in the examples directory.
+```go
+    byte_length := 16
+    token, err := cafi.NewRandomToken(byte_length)
+    if err != nil {
+        fmt.Printf("Unable to generate a new random token: %s", err)
+    }
+    fmt.Printf("%d byte random token generated: %s", byte_length, token)
+```
 
 ## AWS Provider
 The CAFI AWS package provides a simple way to work with the Amazon AWS API across multiple accounts using STS authentication. It starts with simple functions to work with your shared credentials to begin the process of STS access. It also provides a structure to manage a list of accounts with which to iteract with.
