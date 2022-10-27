@@ -62,9 +62,9 @@ if err != nil {
 Here is an example of using the supported regions data from the accounts.json file. Setting the **input.Config.Region** setting before passing the **input.Config** to the new service will set the region to which the service should interact.
 ```go
 for _, region := range input.Account.SupportedRegions {
-            input.Config.Region = region
-            svc := s3.NewFromConfig(*input.Config)
-            // Do work with the service here
+    input.Config.Region = region
+    svc := s3.NewFromConfig(*input.Config)
+    // Do work with the service here
 }
 ```
 
