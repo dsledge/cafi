@@ -124,7 +124,7 @@ func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out
 			// AssumeRole and get sts credentials for the remote account
 			err = assumeRole(&account)
 			if err != nil {
-				scribble.Error("Could not assume role for account: %s (%s), %s", account.AccountNumber, account.AccountName, err)
+				scribble.Error("Could not assume role for account: %s (%s)\n\nError Message: %s\n", account.AccountNumber, account.AccountName, err)
 			}
 
 			// Execute the function used for iteration
@@ -138,7 +138,7 @@ func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out
 			account := getAccount(account_number)
 			err = assumeRole(account)
 			if err != nil {
-				scribble.Error("Could not assume role for account: %s (%s), %s", account.AccountNumber, account.AccountName, err)
+				scribble.Error("Could not assume role for account: %s (%s)\n\nError Message: %s\n", account.AccountNumber, account.AccountName, err)
 			}
 
 			// Execute the function used for iteration
