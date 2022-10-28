@@ -117,14 +117,14 @@ func Configure(filepath string) error {
 }
 
 // Execute function logic on multiple accounts
-func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out Output) error {
+func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out Output) {
 	if accounts == nil {
 		scribble.Trace("Iterating all accounts found in the %s", accounts_file)
 		for _, account := range aws_accounts.Accounts {
 			// AssumeRole and get sts credentials for the remote account
 			err = assumeRole(&account)
 			if err != nil {
-				return err
+				scribble.Error("Could not assume role for account: %s (%s), %s", account.AccountNumber, account.AccountName, err)
 			}
 
 			// Execute the function used for iteration
@@ -138,7 +138,7 @@ func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out
 			account := getAccount(account_number)
 			err = assumeRole(account)
 			if err != nil {
-				return err
+				scribble.Error("Could not assume role for account: %s (%s), %s", account.AccountNumber, account.AccountName, err)
 			}
 
 			// Execute the function used for iteration
@@ -146,6 +146,4 @@ func ExecuteOnAccounts(accounts *[]string, f func(input *Input, out Output), out
 			f(&input, out)
 		}
 	}
-
-	return nil
 }

@@ -76,10 +76,7 @@ type TestOutput struct {
 }
 
 output := TestOutput{}
-err = aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, &output)
-if err != nil {
-    fmt.Printf("Error iterating accounts: %s\n", err)
-}
+aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, &output)
 
 fmt.Printf("TESTING OUTPUT: %s\n", output.Name)
 ```

@@ -45,8 +45,5 @@ func main() {
 		}
 	}
 
-	err = aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, nil)
-	if err != nil {
-		fmt.Printf("Error iterating accounts: %s\n", err)
-	}
+	aws_cafi.ExecuteOnAccounts(nil, s3listbuckets, nil)
 }
